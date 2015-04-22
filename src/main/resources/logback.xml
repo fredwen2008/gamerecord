@@ -1,0 +1,22 @@
+<!DOCTYPE configuration>
+<configuration>
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>%d{YYYY-MM-DD HH:mm:ss.SSS} %-5level %logger: %msg%n
+            </Pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+    </appender>
+
+    <logger name="com.unigames" additivity="false">
+        <level value="DEBUG"/>
+        <appender-ref ref="consoleAppender"/>
+    </logger>
+
+    <root>
+        <level value="WARN"/>
+        <appender-ref ref="consoleAppender"/>
+    </root>
+</configuration>
