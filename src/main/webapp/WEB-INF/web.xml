@@ -22,6 +22,7 @@
         <filter-name>encoding-filter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
     <servlet>
         <servlet-name>dispatcher</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -31,8 +32,23 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
+
+    <servlet>
+        <servlet-name>errorHandler</servlet-name>
+        <servlet-class>com.unigames.error.ErrorHandler</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>errorHandler</servlet-name>
+        <url-pattern>/error-page</url-pattern>
+    </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+
+    <error-page>
+        <location>/error-page</location>
+    </error-page>
 </web-app>

@@ -25,11 +25,11 @@ public class ErrorHandler extends HttpServlet {
         }
         String msg;
         if (throwable != null) {
-            msg = "[service] Throwable message:" + throwable.getMessage();
+            msg = throwable.getMessage();
             logger.warn(msg);
             logger.debug(msg, throwable);
         } else {
-            msg = "[service] Servlet error message:" + req.getAttribute("javax.servlet.error.message");
+            msg = (String) req.getAttribute("javax.servlet.error.message");
             logger.warn(msg);
         }
 
