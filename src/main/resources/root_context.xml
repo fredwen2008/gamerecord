@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:auth="http://www.springframework.org/schema/security"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-4.1.xsd
+                           http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+                           http://www.springframework.org/schema/mvc
+                           http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+                           http://www.springframework.org/schema/security
+                           http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!--<context:annotation-config/>-->
+    <context:component-scan base-package="com.unigames"/>
+    <context:property-placeholder location="classpath:app.properties"
+                                  ignore-unresolvable="true"/>
+
+    <mvc:annotation-driven>
+        <mvc:argument-resolvers>
+            <bean class="com.unigames.annotation.resolver.RequestAttributeArgumentResolver"/>
+        </mvc:argument-resolvers>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper" ref="jsonMapper"/>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    <bean id="jsonMapper"
+          class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+        <property name="featuresToEnable">
+            <array>
+                <value>#{T(com.fasterxml.jackson.databind.SerializationFeature).INDENT_OUTPUT}</value>
+            </array>
+        </property>
+        <!--<property name="featuresToDisable">-->
+        <!--<array>-->
+        <!--<value>#{T(com.fasterxml.jackson.databind.DeserializationFeature).FAIL_ON_UNKNOWN_PROPERTIES}</value>-->
+        <!--</array>-->
+        <!--</property>-->
+    </bean>
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="${upload.maxSize} "/>
+    </bean>
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${dbpool.driverClassName}"/>
+        <property name="url" value="${dbpool.url}"/>
+        <property name="username" value="${dbpool.username}"/>
+        <property name="password" value="${dbpool.password}"/>
+        <property name="initialSize" value="${dbpool.initialSize}"/>
+        <property name="maxActive" value="${dbpool.maxActive}"/>
+    </bean>
+
+    <bean id="digestFilter" class=
+            "org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
+        <property name="userDetailsService" ref="userService"/>
+        <property name="authenticationEntryPoint" ref="digestEntryPoint"/>
+    </bean>
+
+    <bean id="digestEntryPoint" class=
+            "org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
+        <property name="realmName" value="Contacts Realm via Digest Authentication"/>
+        <property name="key" value="acegi"/>
+        <property name="nonceValiditySeconds" value="10"/>
+    </bean>
+
+    <auth:http use-expressions="true" entry-point-ref="digestEntryPoint">
+        <auth:intercept-url pattern="/**" access="isAuthenticated()"/>
+        <auth:custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER"/>
+    </auth:http>
+
+    <auth:authentication-manager>
+        <auth:authentication-provider>
+            <auth:user-service id="userService">
+                <auth:user name="user1" password="user1Pass" authorities="ROLE_USER"/>
+            </auth:user-service>
+        </auth:authentication-provider>
+    </auth:authentication-manager>
+</beans>
