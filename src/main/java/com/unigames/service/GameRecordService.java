@@ -87,6 +87,8 @@ public class GameRecordService {
             preparedStatement.execute();
         } catch (SQLException e) {
             logger.warn("Add record to mysql for record:" + recordId + " failed.");
+            throw new InternalException();
+        } finally {
             try {
                 if (preparedStatement != null) {
                     preparedStatement.close();
@@ -95,9 +97,7 @@ public class GameRecordService {
                     connection.close();
                 }
             } catch (SQLException ignored) {
-
             }
-            throw new InternalException();
         }
     }
 
@@ -159,6 +159,8 @@ public class GameRecordService {
             }
         } catch (SQLException e) {
             logger.warn("Query records failed.");
+            throw new InternalException();
+        } finally {
             try {
                 if (preparedStatement != null) {
                     preparedStatement.close();
@@ -167,9 +169,7 @@ public class GameRecordService {
                     connection.close();
                 }
             } catch (SQLException ignored) {
-
             }
-            throw new InternalException();
         }
         return result;
     }
@@ -224,6 +224,8 @@ public class GameRecordService {
             }
         } catch (SQLException e) {
             logger.warn("Query records failed.");
+            throw new InternalException();
+        } finally {
             try {
                 if (preparedStatement != null) {
                     preparedStatement.close();
@@ -232,9 +234,7 @@ public class GameRecordService {
                     connection.close();
                 }
             } catch (SQLException ignored) {
-
             }
-            throw new InternalException();
         }
     }
 
@@ -265,6 +265,8 @@ public class GameRecordService {
             }
         } catch (SQLException e) {
             logger.warn("Query records failed.");
+            throw new InternalException();
+        } finally {
             try {
                 if (preparedStatement != null) {
                     preparedStatement.close();
@@ -273,9 +275,7 @@ public class GameRecordService {
                     connection.close();
                 }
             } catch (SQLException ignored) {
-
             }
-            throw new InternalException();
         }
     }
 }

@@ -58,6 +58,8 @@
         <property name="password" value="${dbpool.password}"/>
         <property name="initialSize" value="${dbpool.initialSize}"/>
         <property name="maxActive" value="${dbpool.maxActive}"/>
+        <property name="maxIdle" value="${dbpool.maxIdle}"/>
+        <property name="validationQuery" value="SELECT 1"/>
     </bean>
 
     <bean id="digestFilter" class=

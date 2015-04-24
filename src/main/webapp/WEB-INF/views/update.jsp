@@ -4,7 +4,7 @@
     <title></title>
 </head>
 <body>
-<h2>Game Record Upload Sample</h2>
+<h2>Game Record Update Sample</h2>
 
 <form method="POST">
 
